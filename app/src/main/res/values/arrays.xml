@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinner_acount">
+        <item>登录</item>
+        <item>注册 </item>
+        <!--<item>忘记密码</item>-->
+    </string-array>
+</resources>

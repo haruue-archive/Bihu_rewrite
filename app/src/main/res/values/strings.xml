@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Bihu_Rewrite</string>
+    <string name="refresh">刷新</string>
+    <string name="refresh_success">刷新成功</string>
+    <string name="refresh_fail">刷新失败</string>
+    <string name="ask_success">提问成功</string>
+    <string name="commite_fail">提交失败</string>
+    <string name="answer_success">回复成功</string>
+    <string name="question_title">问题标题</string>
+    <string name="question_detail">问题详情</string>
+    <string name="question_title_question">提问</string>
+    <string name="question_title_answer">回答</string>
+    <string name="not_login">未登录</string>
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+    <string name="account">用户名</string>
+    <string name="username">用户名</string>
+    <string name="password">密码</string>
+    <string name="login">登录</string>
+    <string name="loading">正在加载</string>
+    <string name="nomore">抱歉，后面没有了</string>
+    <string name="change_pass">修改密码</string>
+    <string name="regist">注册</string>
+    <string name="regist_fail">没有网络连接或者此帐号已被注册</string>
+    <string name="regist_success">注册成功,请登录</string>
+    <string name="repeat_password">重复密码</string>
+    <string name="email">邮箱</string>
+    <string name="login_success">登录成功</string>
+    <string name="connecting">正在从服务器获取信息...</string>
+    <string name="connecting_fail">你和服务器之间貌似没有直接或间接的联系</string>
+    <string name="about">关于</string>
+    <string name="about_detail">介绍就两个字:"逼乎"。尽情地撕逼吧</string>
+    <string name="exit">退出</string>
+    <string name="account_title">账号操作</string>
+</resources>

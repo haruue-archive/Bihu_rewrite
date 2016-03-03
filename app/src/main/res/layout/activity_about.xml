@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+        android:id="@+id/about_bar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentTop="true"
+        android:background="@color/colorPrimary"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:layout_centerInParent="true"
+            />
+        <ImageButton
+            android:id="@+id/about_back"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_alignParentStart="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/back"
+            android:background="@color/none"
+            />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/about_bar"
+        android:gravity="center_horizontal"
+        android:text="头像暂时没实现\n1.没有图片服务器。\n2.时间不够了233，后面再加\n3.尽情撕逼吧"
+        android:textSize="24sp"
+        />
+
+</RelativeLayout>
