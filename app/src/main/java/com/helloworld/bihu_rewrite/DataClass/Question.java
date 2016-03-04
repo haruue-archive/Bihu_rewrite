@@ -53,7 +53,7 @@ public class Question {
 
     @Override
     public String toString() {
-        return authorName+":"+title+":"+content+":"+date;
+        return authorName+"在"+date+"发表了"+title+":"+content;
     }
 }
 

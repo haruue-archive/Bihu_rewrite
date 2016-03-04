@@ -42,9 +42,9 @@ public class Account {
         this.onLoginSuccessListener = onLoginSuccessListener;
     }
 
-    public Account(String password, String username,int operation) throws RuntimeException {
-        this.password = password;
+    public Account(String username,String password, int operation) throws RuntimeException {
         this.username = username;
+        this.password = password;
         if (operation == op_login){
             new Thread(new Runnable() {
                 @Override
