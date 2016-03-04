@@ -488,7 +488,8 @@ public class MainActivity extends AppCompatActivity{
         public View onCreateView(ViewGroup parent) {
             if (view == null) {
                 view = getLayoutInflater().inflate(R.layout.detail_item, parent, false);
-                view.setBackgroundColor(0);
+                //TODO: 下面这个被我禁用的函数调用导致了 API 21 以下的崩溃问题。。。 --Haruue Icymoon
+//                view.setBackgroundColor(0);
                 atitle = (TextView) view.findViewById(R.id.question_title);
                 adetail = (TextView) view.findViewById(R.id.question_detail);
                 atime = (TextView) view.findViewById(R.id.quest_time);

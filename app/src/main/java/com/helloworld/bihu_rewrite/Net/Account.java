@@ -1,12 +1,16 @@
 package com.helloworld.bihu_rewrite.Net;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import com.helloworld.bihu_rewrite.DataClass.ApiPath;
 import com.helloworld.bihu_rewrite.DataClass.Operations;
 import com.helloworld.bihu_rewrite.DataClass.Listeners;
 import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -27,6 +31,7 @@ public class Account {
     private String password = null;
     private OnLoginSuccessListener onLoginSuccessListener = null;
     private Listeners.OnFailListener onFailListener = null;
+    private Context context;
 
     Handler handler = null;
 
@@ -34,6 +39,7 @@ public class Account {
     private static final String login_path = "login.php";
     private static final int op_login = 0;
     private static final int op_regist = 1;
+
     public void setOnFailListener(Listeners.OnFailListener onFailListener) {
         this.onFailListener = onFailListener;
     }
@@ -42,9 +48,10 @@ public class Account {
         this.onLoginSuccessListener = onLoginSuccessListener;
     }
 
-    public Account(String username,String password, int operation) throws RuntimeException {
+    public Account(Context context, String username, String password, int operation) throws RuntimeException {
         this.username = username;
         this.password = password;
+        this.context = context;
         if (operation == op_login){
             new Thread(new Runnable() {
                 @Override
@@ -67,69 +74,85 @@ public class Account {
         RequestBody requestBody = new FormEncodingBuilder().add("name",username).add("password",password).build();
         final Request request = new Request.Builder().url(ApiPath.PATH + login_path).post(requestBody).build();
         Call call = okHttpClient.newCall(request);
-        Response response = null;
         try {
-            response = call.execute();
-        } catch (IOException e) {
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+                    Looper.prepare();
+                    handler = new Handler();
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            onFailListener.OnFail(Operations.OP_LOGIN);
+                        }
+                    });
+                    Looper.loop();
+                }
+
+                @Override
+                public void onResponse(Response response) throws IOException {
+                    Looper.prepare();
+                    handler = new Handler();
+                    final Response finalResponse = response;
+                    if (response.code() == 200) {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onLoginSuccessListener.OnLoginSuccess(responseToMap(finalResponse));
+                            }
+                        });
+                    } else {
+                        Toast.makeText(context, "用户名或密码错误", Toast.LENGTH_SHORT).show();
+                    }
+                    Looper.loop();
+                }
+            });
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        if (response != null&&response.isSuccessful()){
-            Looper.prepare();
-            handler = new Handler();
-            final Response finalResponse = response;
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    onLoginSuccessListener.OnLoginSuccess(responseToMap(finalResponse));
-                }
-            });
-            Looper.loop();
-        }else {
-            Looper.prepare();
-            handler = new Handler();
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    onFailListener.OnFail(Operations.OP_LOGIN);
-                }
-            });
-            Looper.loop();
-        }
-
     }
     private void regist(){
         OkHttpClient okHttpClient = new OkHttpClient();
         RequestBody requestBody = new FormEncodingBuilder().add("name", username).add("password", password).build();
         final Request request = new Request.Builder().url(ApiPath.PATH+regist_path).post(requestBody).build();
-        Response response = null;
         try {
-            response = okHttpClient.newCall(request).execute();
-        } catch (IOException e) {
+            okHttpClient.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Request request, IOException e) {
+                    Looper.prepare();
+                    handler = new Handler();
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            onFailListener.OnFail(Operations.OP_REGIST);
+                        }
+                    });
+                    Looper.loop();
+                }
+
+                @Override
+                public void onResponse(Response response) throws IOException {
+                    Looper.prepare();
+                    if (response.code() == 200) {
+                        Toast.makeText(context, "注册成功，正在使用您新注册的账户进行登录", Toast.LENGTH_SHORT).show();
+                        login();
+                    } else {
+                        handler = new Handler();
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                onFailListener.OnFail(Operations.OP_REGIST);
+                            }
+                        });
+                        Looper.loop();
+                    }
+                }
+            });
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        if (response != null&&response.isSuccessful()){
-            Looper.prepare();
-            handler = new Handler();
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    onLoginSuccessListener.OnLoginSuccess(null);
-                }
-            });
-            Looper.loop();
-        }else {
-            Looper.prepare();
-            handler = new Handler();
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    onFailListener.OnFail(Operations.OP_REGIST);
-                }
-            });
-            Looper.loop();
-        }
-
     }
+
     private Map<String,String> responseToMap(Response response){
         try {
             JSONObject jsonObject = new JSONObject(response.body().string());
@@ -147,8 +170,5 @@ public class Account {
     public interface OnLoginSuccessListener{
         void OnLoginSuccess(Map<String, String> map);
     }
-
-
-
 
 }

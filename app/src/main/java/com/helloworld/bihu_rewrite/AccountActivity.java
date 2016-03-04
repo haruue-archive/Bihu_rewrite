@@ -74,7 +74,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 }else if ((spinner.getSelectedItemPosition() != 0) && !(password = password_edit.getText().toString()).equals(repassword_edit.getText().toString())) {
                     Toast.makeText(AccountActivity.this, "两次密码不同", Toast.LENGTH_SHORT).show();
                 } else {
-                    account = new Account(username, password, spinner.getSelectedItemPosition());
+                    account = new Account(getApplication(), username, password, spinner.getSelectedItemPosition());
                     account.setOnLoginSuccessListener(this);
                     account.setOnFailListener(this);
                 }
